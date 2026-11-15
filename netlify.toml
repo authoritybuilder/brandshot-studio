@@ -1,0 +1,29 @@
+# The Prompt Studio — Netlify configuration
+# Static site: no build step. Publish the repo root.
+
+[build]
+  publish = "."
+  command = ""
+
+# index.json must never be served stale — it carries the library version.
+[[headers]]
+  for = "/index.json"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+# Per-prompt JSONs are immutable per data version (cache-busted by ?v= query).
+[[headers]]
+  for = "/prompts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+[[headers]]
+  for = "/previews/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
